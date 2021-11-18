@@ -85,6 +85,8 @@ class InternationalPhoneNumberInput extends StatefulWidget {
 
   final List<String>? countries;
 
+  final bool isShowSelector;
+
   InternationalPhoneNumberInput(
       {Key? key,
       this.selectorConfig = const SelectorConfig(),
@@ -122,7 +124,9 @@ class InternationalPhoneNumberInput extends StatefulWidget {
       this.focusNode,
       this.cursorColor,
       this.autofillHints,
-      this.countries})
+      this.countries,
+      this.isShowSelector = true,
+      })
       : super(key: key);
 
   @override
@@ -393,6 +397,7 @@ class _InputWidgetView
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          if(widget.isShowSelector)
           if (!widget.selectorConfig.setSelectorButtonAsPrefixIcon) ...[
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -416,7 +421,7 @@ class _InputWidgetView
             ),
             SizedBox(width: widget.spaceBetweenSelectorAndTextField),
           ],
-          Flexible(
+          Expanded(
             child: TextFormField(
               key: Key(TestHelper.TextInputKeyValue),
               textDirection: TextDirection.ltr,
@@ -442,17 +447,17 @@ class _InputWidgetView
                 LengthLimitingTextInputFormatter(widget.maxLength),
                 widget.formatInput
                     ? AsYouTypeFormatter(
-                        isoCode: countryCode,
-                        dialCode: dialCode,
-                        onInputFormatted: (TextEditingValue value) {
-                          state.controller!.value = value;
-                        },
-                      )
+                  isoCode: countryCode,
+                  dialCode: dialCode,
+                  onInputFormatted: (TextEditingValue value) {
+                    state.controller!.value = value;
+                  },
+                )
                     : FilteringTextInputFormatter.digitsOnly,
               ],
               onChanged: state.onChanged,
             ),
-          )
+          ),
         ],
       ),
     );
